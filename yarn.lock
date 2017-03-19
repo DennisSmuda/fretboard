@@ -3526,6 +3526,18 @@ tonal-freq@^0.69.0:
   dependencies:
     tonal-midi "^0.69.0"
 
+tonal-fretboard@^0.69.1:
+  version "0.69.1"
+  resolved "https://registry.yarnpkg.com/tonal-fretboard/-/tonal-fretboard-0.69.1.tgz#5eb7d69e4ec6f9e2c205b6c734e7d7e241e387ea"
+  dependencies:
+    tonal-array "^0.69.0"
+    tonal-dictionary "^0.69.1"
+    tonal-interval "^0.69.0"
+    tonal-note "^0.69.0"
+    tonal-pcset "^0.69.1"
+    tonal-range "^0.69.1"
+    tonal-transpose "^0.69.0"
+
 tonal-harmonizer@^0.69.0:
   version "0.69.0"
   resolved "https://registry.yarnpkg.com/tonal-harmonizer/-/tonal-harmonizer-0.69.0.tgz#6077c1ab7489f213efcb30c3f5bc5a986fa6ac49"

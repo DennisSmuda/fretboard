@@ -21,6 +21,7 @@
     "file-loader": "^0.9.0",
     "style-loader": "^0.13.1",
     "tonal": "^0.69.1",
+    "tonal-fretboard": "^0.69.1",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0"
   },
