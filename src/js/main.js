@@ -4,6 +4,9 @@ import Fretboard from './fretboard.js';
 
 
 // Initialize Fretboard
-let fretBoard = new Fretboard();
+let fretBoard = new Fretboard({
+  numFrets: 17,
+  numStrings: 6
+});
 
 
