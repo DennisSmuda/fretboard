@@ -12,7 +12,7 @@ export default class Fretboard {
     numFrets = 15,
     numStrings = 6,
     tuning = 'guitar',
-    scale = 'Eb bebop'
+    scale = 'E lydian'
   }) {
     this.container = document.getElementById('canvas-container');
     this.canvas = document.getElementById('fretboard');
@@ -34,12 +34,14 @@ export default class Fretboard {
     this.stringHeight = 0;
 
     // Notes
+    this.noteRadius = this.fretWidth / 3;
     this.numNotes = this.numFrets * this.numStrings;
     this.notes = [this.numNotes];
 
     // Get Scale Notes from tonal
     this.scale = tonal.scale(scale);
     this.board = fret.notes(this.tuning, 0, this.numFrets, this.scale);
+    // this.board = fret.notes(this.tuning, 0, this.numFrets);
 
     this.init();
   }
@@ -51,42 +53,62 @@ export default class Fretboard {
     this.drawFrets();
     this.drawStrings();
     this.initNotes();
+  }
+  
+  /**
+   * Trim trailing numbers from Note names
+   * - A#4 -> A#
+   */
+  trimNumber(note) {
+    return note.replace(/\d+$/, "");
+  }
 
+  mapNoteToInterval(note) {
+    
   }
 
   initNotes() {
+    this.ctx.font = '15px Fira Sans';
     console.log(this.board);
+    console.log(this.scale);
+    console.log(tonal.harmonics(this.scale));
     this.board.forEach((string, i) => {
-      console.log('String:', i, string);
+      // console.log('String:', i, string);
 
       string.forEach((note, j) => {
 
         if (note !== null) {
+          let name = this.trimNumber(note);
+          // console.log(note);
+          this.ctx.fillStyle = '#000'
+          this.ctx.fillText(name,
+            j * this.fretWidth - this.zeroFretOffset - 5,
+            i * this.stringHeight + this.stringPadding + 3
+          );
           this.ctx.fillStyle = '#0c0c0c'
+          this.ctx.strokeStyle = '#000'
         } else {
           this.ctx.fillStyle = '#c0c0c0'
-          // return;
+          this.ctx.strokeStyle = '#c0c0c0'
         }
-
-        // console.log('Note: ', i, j, note);
 
         this.ctx.beginPath();
         if (j > 0) {
           this.ctx.arc(
             j * this.fretWidth + this.zeroFretOffset - (this.fretWidth / 2),
-            i * this.stringHeight + this.stringHeight/2 + this.stringPadding/4,
-            8, 0, Math.PI * 2
+            i * this.stringHeight + this.stringHeight / 2 + this.stringPadding / 4,
+            this.noteRadius, 0, Math.PI * 2
           );
         } else {
           // Zero Fret
           this.ctx.arc(
             j * this.fretWidth + this.zeroFretOffset / 2,
-            i * this.stringHeight + this.stringHeight / 2 + this.stringPadding/4,
-            8,
-            0, Math.PI * 2
+            i * this.stringHeight + this.stringHeight / 2 + this.stringPadding / 4,
+            this.noteRadius / 2, 0, Math.PI * 2
           );
+          this.ctx.fill();
         }
-        this.ctx.fill();
+        this.ctx.stroke();
       });
     });
   }
@@ -105,15 +127,13 @@ export default class Fretboard {
 
   drawStrings() {
     let height = this.height - this.stringPadding;
-    let stringHeight = height / this.numStrings;
-    this.stringHeight = stringHeight;
+    this.stringHeight = height / this.numStrings;
     this.ctx.strokeStyle = '#c0c0c0'
 
     for (let i = 0; i < this.numStrings; i++) {
-      // console.log(`Draw String: ${i * stringHeight} ` + i * this.fretWidth + ':' + i);
       this.ctx.beginPath();
-      this.ctx.moveTo(0, i * stringHeight + this.stringPadding);
-      this.ctx.lineTo(this.width, i * stringHeight + this.stringPadding);
+      this.ctx.moveTo(0, i * this.stringHeight + this.stringPadding);
+      this.ctx.lineTo(this.width, i * this.stringHeight + this.stringPadding);
       this.ctx.stroke();
       this.ctx.closePath();
     }
