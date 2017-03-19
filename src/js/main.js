@@ -1,7 +1,13 @@
 let styles = require('../styles/main.scss');
 import Fretboard from './fretboard.js';
 
+console.log(styles);
 
+
+(() => {
+  console.log('Document Load');
+  console.log(window.getComputedStyle(document.getElementById('root')).backgroundColor)
+})();
 
 // Initialize Fretboard
 let fretBoard = new Fretboard({

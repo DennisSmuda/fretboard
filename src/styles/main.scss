@@ -23,3 +23,35 @@ main {
 
 canvas {
 }
+
+$rootColor: #0000ff;
+$thirdColor: #ff0000;
+$fifthColor: #00af00;
+$sevenColor: #ff00ff;
+
+.legend {
+  display: flex;
+  justify-content: flex-start;
+
+  span {
+    margin: 1rem 1rem 0;
+    padding: 1rem;
+    color: white;
+    flex: auto;
+    text-align: center;
+
+    &#root {
+      background-color: $rootColor;
+    }
+
+    &#third {
+      background-color: $thirdColor;
+    }
+    &#fifth {
+      background-color: $fifthColor;
+    }
+    &#seven {
+      background-color: $sevenColor;
+    }
+  }
+}

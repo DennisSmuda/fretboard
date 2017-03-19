@@ -1,7 +1,6 @@
 let tonal = require('tonal');
 let fret = require('tonal-fretboard');
 
-
 /** Fretboard Class */
 export default class Fretboard {
   /**
@@ -49,6 +48,12 @@ export default class Fretboard {
     this.third = this.scale[2];
     this.fifth = this.scale[4];
     this.seven = this.scale[6];
+    this.colors = {
+      rootColor: null,
+      thirdColor: null,
+      fifthColor: null,
+      sevenColor: null,
+    };
 
     this.init();
   }
@@ -57,9 +62,17 @@ export default class Fretboard {
    * Initialize Fretboard with Strings and Notes
    */
   init() {
+    this.getColors();
     this.drawFrets();
     this.drawStrings();
     this.initNotes();
+  }
+
+  getColors() {
+    this.colors.rootColor = window.getComputedStyle(document.getElementById('root')).backgroundColor;
+    this.colors.thirdColor = window.getComputedStyle(document.getElementById('third')).backgroundColor;
+    this.colors.fifthColor = window.getComputedStyle(document.getElementById('fifth')).backgroundColor;
+    this.colors.sevenColor = window.getComputedStyle(document.getElementById('seven')).backgroundColor;
   }
 
   /**
@@ -91,20 +104,21 @@ export default class Fretboard {
           let name = this.trimNumber(note);
           // Fill Text / Stroke Circle
           if (name == this.rootnote) {
-            this.ctx.fillStyle = '#0000ff'
-            this.ctx.strokeStyle = '#0000ff'
+            this.ctx.fillStyle = this.colors.rootColor;
+            this.ctx.strokeStyle = this.colors.rootColor;
           } else if (name == this.fifth) {
-            this.ctx.fillStyle = '#00af00'
-            this.ctx.strokeStyle = '#00af00'
+            this.ctx.fillStyle = this.colors.fifthColor;
+            this.ctx.strokeStyle = this.colors.fifthColor;
           } else if (name == this.third) {
-            this.ctx.fillStyle = '#ff0000'
-            this.ctx.strokeStyle = '#ff0000'
+            this.ctx.fillStyle = this.colors.thirdColor;
+            this.ctx.strokeStyle = this.colors.thirdColor;
           } else if (name == this.seven) {
-            this.ctx.fillStyle = '#ff00ff'
-            this.ctx.strokeStyle = '#ff00ff'
+            this.ctx.fillStyle = this.colors.sevenColor;
+            this.ctx.strokeStyle = this.colors.sevenColor;
           } else {
             this.ctx.fillStyle = '#000'
             this.ctx.strokeStyle = '#000'
+            this.ctx.lineWidth = 1.5
           }
           this.ctx.fillText(name,
             j * this.fretWidth - this.zeroFretOffset - 5,
