@@ -12,7 +12,7 @@ export default class Fretboard {
     numFrets = 15,
     numStrings = 6,
     tuning = 'guitar',
-    scale = 'E lydian'
+    scale = 'E major'
   }) {
     this.container = document.getElementById('canvas-container');
     this.canvas = document.getElementById('fretboard');
@@ -42,6 +42,10 @@ export default class Fretboard {
     this.scale = tonal.scale(scale);
     this.board = fret.notes(this.tuning, 0, this.numFrets, this.scale);
     // this.board = fret.notes(this.tuning, 0, this.numFrets);
+    this.rootnote = this.scale[0];
+    this.third = this.scale[2];
+    this.fifth = this.scale[4];
+    this.seven = this.scale[6];
 
     this.init();
   }
@@ -54,7 +58,7 @@ export default class Fretboard {
     this.drawStrings();
     this.initNotes();
   }
-  
+
   /**
    * Trim trailing numbers from Note names
    * - A#4 -> A#
@@ -64,29 +68,46 @@ export default class Fretboard {
   }
 
   mapNoteToInterval(note) {
-    
+
   }
 
   initNotes() {
     this.ctx.font = '15px Fira Sans';
     console.log(this.board);
     console.log(this.scale);
+    console.log('rootnote' + this.rootnote);
+    console.log('fifth' + this.fifth);
+
     console.log(tonal.harmonics(this.scale));
     this.board.forEach((string, i) => {
-      // console.log('String:', i, string);
+      console.log('String:', i, string);
 
       string.forEach((note, j) => {
 
         if (note !== null) {
           let name = this.trimNumber(note);
-          // console.log(note);
-          this.ctx.fillStyle = '#000'
+          // Fill Text / Stroke Circle
+          if (name == this.rootnote) {
+            this.ctx.fillStyle = 'blue'
+            this.ctx.strokeStyle = '#0000ff'
+          } else if (name == this.fifth) {
+            this.ctx.fillStyle = '#000000'
+            this.ctx.strokeStyle = '#00f000'
+          } else if (name == this.third) {
+            this.ctx.fillStyle = '#ff0000'
+            this.ctx.strokeStyle = '#ff0000'
+          } else if (name == this.seven) {
+            this.ctx.fillStyle = '#ff00ff'
+            this.ctx.strokeStyle = '#ff00ff'
+          } else {
+            this.ctx.fillStyle = '#000'
+            this.ctx.strokeStyle = '#000'
+          }
           this.ctx.fillText(name,
             j * this.fretWidth - this.zeroFretOffset - 5,
             i * this.stringHeight + this.stringPadding + 3
           );
           this.ctx.fillStyle = '#0c0c0c'
-          this.ctx.strokeStyle = '#000'
         } else {
           this.ctx.fillStyle = '#c0c0c0'
           this.ctx.strokeStyle = '#c0c0c0'
