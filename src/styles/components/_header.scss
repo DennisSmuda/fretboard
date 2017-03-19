@@ -1,0 +1,26 @@
+header {
+  background-color: #3a3a3a;
+  padding: 1rem;
+  height: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  display: inline-block;
+}
+
+header a {
+
+  color: rgb(238, 238, 238)
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:active, &:visited {
+    color: rgb(238, 238, 238)
+  }
+}

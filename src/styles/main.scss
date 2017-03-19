@@ -1,7 +1,10 @@
+@import './components/header';
+@import './components/controls';
 
 * {
   margin: 0;
   padding: 0;
+  box-sizing: content-box;
   font-family: 'Fira Sans';
 }
 
@@ -10,10 +13,6 @@ body {
 
 
 main {
-}
-
-h1 {
-  margin: 2rem 1rem 1rem;
 }
 
 #canvas-container {

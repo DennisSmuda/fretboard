@@ -1,18 +1,21 @@
-import tonal from 'tonal';
+let tonal = require('tonal');
 let fret = require('tonal-fretboard');
 
-/**
- * Fretboard
- * @property numFrets 
- * @property numStrings 
- * @property tuning 
- */
+
+/** Fretboard Class */
 export default class Fretboard {
+  /**
+   * Fretboard Constructor
+   * @constructor
+   * @property {number} numFrets - Amount of Frets to display
+   * @property {number} numStrings - Amount of strings
+   * @property {string} tuning - Tuning: See tonal api docs
+   */
   constructor({
-    numFrets = 15,
+    numFrets   = 15,
     numStrings = 6,
-    tuning = 'guitar',
-    scale = 'E major'
+    tuning     = 'guitar',
+    scale      = 'E major'
   }) {
     this.container = document.getElementById('canvas-container');
     this.canvas = document.getElementById('fretboard');
@@ -61,12 +64,16 @@ export default class Fretboard {
 
   /**
    * Trim trailing numbers from Note names
-   * - A#4 -> A#
+   * @param {string} complete Notename
+   * @return {string} trimmed Notename
    */
   trimNumber(note) {
     return note.replace(/\d+$/, "");
   }
 
+  /**
+   * Initialize Notes on Fretboard
+   */
   initNotes() {
     this.ctx.font = '15px Fira Sans';
 
@@ -75,7 +82,7 @@ export default class Fretboard {
 
       string.forEach((note, j) => {
         if (i === 0) {
-          if (j == 5 || j == 7 || j == 9 || j == 12 || j == 15 || j == 17) {
+          if (j === 3 || j === 5 ||  j === 7 ||  j === 9 ||  j === 12 ||  j === 15 ||  j === 17) {
             this.drawFretNumber(j);
           }
         }
@@ -101,7 +108,7 @@ export default class Fretboard {
           }
           this.ctx.fillText(name,
             j * this.fretWidth - this.zeroFretOffset - 5,
-            i * this.stringHeight + this.stringPadding + 3
+            (5 - i) * this.stringHeight + this.stringPadding + 3
           );
           this.ctx.fillStyle = '#0c0c0c'
         } else {
@@ -116,14 +123,14 @@ export default class Fretboard {
         if (j > 0) {
           this.ctx.arc(
             j * this.fretWidth + this.zeroFretOffset - (this.fretWidth / 2),
-            i * this.stringHeight + this.stringHeight / 2 + this.stringPadding / 4,
+            (5 - i) * this.stringHeight + this.stringHeight / 2 + this.stringPadding / 4,
             this.noteRadius, 0, Math.PI * 2
           );
         } else {
           // Zero Fret
           this.ctx.arc(
             j * this.fretWidth + this.zeroFretOffset / 2,
-            i * this.stringHeight + this.stringHeight / 2 + this.stringPadding / 4,
+            (5 - i) * this.stringHeight + this.stringHeight / 2 + this.stringPadding / 4,
             this.noteRadius / 2, 0, Math.PI * 2
           );
           this.ctx.fill();

@@ -1,0 +1,33 @@
+$controlWidth: 200px;
+
+aside#controls {
+  box-sizing: border-box;
+  position: fixed;
+  padding: 2rem;
+  top: 4rem;
+  left: 0;
+  height: 100%;
+  width: $controlWidth;
+  background-color: #3a3a3a;
+  box-shadow: 3px 5px 9px 4px rgba(0,0,0,0.1);
+
+  transform: translate3d(-$controlWidth, 0px, 0px);
+  transition: transform 0.3s;
+}
+
+aside#controls.active {
+  transform: translate3d(0px, 0px, 0px);
+}
+
+aside a {
+
+  color: rgb(238, 238, 238)
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:active, &:visited {
+    color: rgb(238, 238, 238)
+  }
+}
