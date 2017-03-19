@@ -67,32 +67,28 @@ export default class Fretboard {
     return note.replace(/\d+$/, "");
   }
 
-  mapNoteToInterval(note) {
-
-  }
-
   initNotes() {
     this.ctx.font = '15px Fira Sans';
-    console.log(this.board);
-    console.log(this.scale);
-    console.log('rootnote' + this.rootnote);
-    console.log('fifth' + this.fifth);
 
-    console.log(tonal.harmonics(this.scale));
     this.board.forEach((string, i) => {
       console.log('String:', i, string);
 
       string.forEach((note, j) => {
+        if (i === 0) {
+          if (j == 5 || j == 7 || j == 9 || j == 12 || j == 15 || j == 17) {
+            this.drawFretNumber(j);
+          }
+        }
 
         if (note !== null) {
           let name = this.trimNumber(note);
           // Fill Text / Stroke Circle
           if (name == this.rootnote) {
-            this.ctx.fillStyle = 'blue'
+            this.ctx.fillStyle = '#0000ff'
             this.ctx.strokeStyle = '#0000ff'
           } else if (name == this.fifth) {
-            this.ctx.fillStyle = '#000000'
-            this.ctx.strokeStyle = '#00f000'
+            this.ctx.fillStyle = '#00af00'
+            this.ctx.strokeStyle = '#00af00'
           } else if (name == this.third) {
             this.ctx.fillStyle = '#ff0000'
             this.ctx.strokeStyle = '#ff0000'
@@ -111,8 +107,11 @@ export default class Fretboard {
         } else {
           this.ctx.fillStyle = '#c0c0c0'
           this.ctx.strokeStyle = '#c0c0c0'
+          // Only render Notes of the scale
+          return;
         }
 
+        // Draw Note To the Fretboard
         this.ctx.beginPath();
         if (j > 0) {
           this.ctx.arc(
@@ -144,6 +143,11 @@ export default class Fretboard {
       this.ctx.stroke();
       this.ctx.closePath();
     }
+  }
+
+  drawFretNumber(fretNumber) {
+    this.ctx.fillStyle = '#00000';
+    this.ctx.fillText(fretNumber, fretNumber * this.fretWidth - this.zeroFretOffset - 2, this.height - 10)
   }
 
   drawStrings() {
