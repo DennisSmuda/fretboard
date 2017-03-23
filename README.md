@@ -18,6 +18,6 @@ let fretboard = new Fretboard({
 #### Install
 
 - yarn install
-- yarn run build
-- yarn start
+- ```yarn run build``` initially to generate dist/ directory
+- ```yarn start``` to develop with hot reload
 

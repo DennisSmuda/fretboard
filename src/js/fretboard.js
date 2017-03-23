@@ -5,7 +5,7 @@ let fret = require('tonal-fretboard');
 export default class Fretboard {
   /**
    * Fretboard Constructor
-   * @constructor
+   * @constructor (Standard Tuning E Major Scale)
    * @property {number} numFrets - Amount of Frets to display
    * @property {number} numStrings - Amount of strings
    * @property {string} tuning - Tuning: See tonal api docs
@@ -62,6 +62,10 @@ export default class Fretboard {
 
   }
 
+  /**
+   * Initialize Select Elements with Data from Tonal
+   * and setup Event Listeners
+   */
   initUi() {
     this.scales.forEach((scale, i) => {
       let option = document.createElement('option');
@@ -85,6 +89,10 @@ export default class Fretboard {
     };
   }
 
+  /**
+   * Change Scale Notes+Key+Colors every time
+   * a select element fires 'onchange'
+   */
   changeScale() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     let newScale = `${this.keySelect.value} ${this.scaleSelect.value}`;
@@ -141,8 +149,6 @@ export default class Fretboard {
     this.ctx.font = '15px Fira Sans';
 
     this.board.forEach((string, i) => {
-      // console.log('String:', i, string);
-
       string.forEach((note, j) => {
 
         if (note !== null) {
@@ -211,6 +217,10 @@ export default class Fretboard {
     }
   }
 
+  /**
+   * Draw Fretnumbers at the bottom
+   * because Inlays look confusing.
+   */
   drawFretNumber() {
     this.board.forEach((string, i) => {
       string.forEach((note, j) => {
@@ -225,6 +235,9 @@ export default class Fretboard {
     });
   }
 
+  /**
+   * Draw Strings
+   */
   drawStrings() {
     let height = this.height - this.stringPadding;
     this.stringHeight = height / this.numStrings;

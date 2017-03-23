@@ -5,6 +5,9 @@ import Fretboard from './fretboard.js';
  * Main Entry
  */
 (() => {
+  let toggle = document.getElementById('toggleControls');
+  let isControlActive = false;
+
   // Initialize Fretboard
   let fretBoard = new Fretboard({
     numFrets: 15,
@@ -12,9 +15,7 @@ import Fretboard from './fretboard.js';
     tuning: 'guitar'
   });
 
-  let toggle = document.getElementById('toggleControls');
-  let isControlActive = false;
-
+  // Toggle Control Sidebar
   toggle.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('Toggle Click')
@@ -28,10 +29,11 @@ import Fretboard from './fretboard.js';
     isControlActive = !isControlActive;
   });
 
+  // Update Fretboard to fit Container
   window.addEventListener('resize', () => {
     fretBoard.updateSize();
     fretBoard.init();
-    console.log("Resize");
   });
+
 })();
 
