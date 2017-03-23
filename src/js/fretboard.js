@@ -19,6 +19,8 @@ export default class Fretboard {
     this.container = document.getElementById('canvas-container');
     this.canvas = document.getElementById('fretboard');
     this.ctx = this.canvas.getContext('2d');
+    this.scaleSelect = document.getElementById('scaleSelect');
+    this.keySelect = document.getElementById('keySelect');
 
     this.tuning = tuning;
 
@@ -26,8 +28,8 @@ export default class Fretboard {
     this.numFrets = numFrets;
     this.zeroFretOffset = 15;
 
-
     this.updateSize();
+
     // Strings
     this.numStrings = numStrings;
     this.stringPadding = this.height / 10;
@@ -38,13 +40,15 @@ export default class Fretboard {
     this.notes = [this.numNotes];
 
     // Get Scale Notes from tonal
-    this.scale = tonal.scale(scale);
-    this.board = fret.notes(this.tuning, 0, this.numFrets, this.scale);
-    // this.board = fret.notes(this.tuning, 0, this.numFrets);
-    this.rootnote = this.scale[0];
-    this.third = this.scale[2];
-    this.fifth = this.scale[4];
-    this.seven = this.scale[6];
+    this.scales = tonal.scale.names();
+    this.keynotes = ['E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb'];
+    this.currentScaleName = scale;
+    this.currentScale = tonal.scale(scale);
+    this.board = fret.notes(this.tuning, 0, this.numFrets, this.currentScale);
+    this.rootnote = this.currentScale[0];
+    this.third = this.currentScale[2];
+    this.fifth = this.currentScale[4];
+    this.seven = this.currentScale[6];
     this.colors = {
       rootColor: null,
       thirdColor: null,
@@ -53,6 +57,44 @@ export default class Fretboard {
     };
 
     this.getColors();
+    this.init();
+    this.initUi();
+
+  }
+
+  initUi() {
+    this.scales.forEach((scale, i) => {
+      let option = document.createElement('option');
+      option.value = scale;
+      option.innerHTML = scale;
+      this.scaleSelect.appendChild(option);
+    });
+
+    this.keynotes.forEach((key, i) => {
+      let option = document.createElement('option');
+      option.value = key;
+      option.innerHTML = key;
+      this.keySelect.appendChild(option);
+    });
+
+    this.scaleSelect.onchange = (el) => {
+      this.changeScale();
+    };
+    this.keySelect.onchange = (el) => {
+      this.changeScale();
+    };
+  }
+
+  changeScale() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    let newScale = `${this.keySelect.value} ${this.scaleSelect.value}`;
+    this.currentScaleName = newScale;
+    this.currentScale = tonal.scale(newScale);
+    this.board = fret.notes(this.tuning, 0, this.numFrets, this.currentScale);
+    this.rootnote = this.currentScale[0];
+    this.third = this.currentScale[2];
+    this.fifth = this.currentScale[4];
+    this.seven = this.currentScale[6];
     this.init();
   }
 
@@ -68,14 +110,13 @@ export default class Fretboard {
   }
 
   getColors() {
-    this.colors.rootColor = window.getComputedStyle(document.getElementById('root')).backgroundColor;
+    this.colors.rootColor  = window.getComputedStyle(document.getElementById('root')).backgroundColor;
     this.colors.thirdColor = window.getComputedStyle(document.getElementById('third')).backgroundColor;
     this.colors.fifthColor = window.getComputedStyle(document.getElementById('fifth')).backgroundColor;
     this.colors.sevenColor = window.getComputedStyle(document.getElementById('seven')).backgroundColor;
   }
 
   updateSize() {
-    console.log("Update Size")
     this.canvas.width = this.container.clientWidth;
     this.canvas.height = this.container.clientHeight;
     this.width = this.canvas.clientWidth;
@@ -175,7 +216,6 @@ export default class Fretboard {
       string.forEach((note, j) => {
         if (i === 0) {
           if (j === 3 || j === 5 ||  j === 7 ||  j === 9 ||  j === 12 ||  j === 15 ||  j === 17) {
-            console.log('Draw Fret Number ');
             this.ctx.fillStyle = '#00000';
             this.ctx.fillText(j, j * this.fretWidth - this.zeroFretOffset - this.width/12.5, this.height - 10);
             this.ctx.fill();
