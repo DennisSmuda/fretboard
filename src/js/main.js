@@ -11,7 +11,7 @@ console.log(styles);
 
 // Initialize Fretboard
 let fretBoard = new Fretboard({
-  numFrets: 17,
+  numFrets: 15,
   numStrings: 6,
   tuning: 'guitar'
 });
@@ -33,3 +33,8 @@ toggle.addEventListener('click', (e) => {
   isControlActive = !isControlActive;
 });
 
+window.addEventListener('resize', () => {
+  fretBoard.updateSize();
+  fretBoard.init();
+  console.log("Resize");
+});

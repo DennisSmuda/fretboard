@@ -11,7 +11,7 @@ export default class Fretboard {
    * @property {string} tuning - Tuning: See tonal api docs
    */
   constructor({
-    numFrets   = 15,
+    numFrets   = 13,
     numStrings = 6,
     tuning     = 'guitar',
     scale      = 'E major'
@@ -19,24 +19,21 @@ export default class Fretboard {
     this.container = document.getElementById('canvas-container');
     this.canvas = document.getElementById('fretboard');
     this.ctx = this.canvas.getContext('2d');
-    this.canvas.width = this.container.clientWidth;
-    this.canvas.height = this.container.clientHeight;
-    this.width = this.canvas.clientWidth;
-    this.height = this.canvas.clientHeight;
+
     this.tuning = tuning;
 
     // Frets
     this.numFrets = numFrets;
     this.zeroFretOffset = 15;
-    this.fretWidth = (this.width - this.zeroFretOffset) / this.numFrets;
 
+
+    this.updateSize();
     // Strings
     this.numStrings = numStrings;
     this.stringPadding = this.height / 10;
     this.stringHeight = 0;
 
     // Notes
-    this.noteRadius = this.fretWidth / 3;
     this.numNotes = this.numFrets * this.numStrings;
     this.notes = [this.numNotes];
 
@@ -55,6 +52,7 @@ export default class Fretboard {
       sevenColor: null,
     };
 
+    this.getColors();
     this.init();
   }
 
@@ -62,9 +60,10 @@ export default class Fretboard {
    * Initialize Fretboard with Strings and Notes
    */
   init() {
-    this.getColors();
+    this.ctx.clearRect(0, 0, this.height, this.width);
     this.drawFrets();
     this.drawStrings();
+    this.drawFretNumber();
     this.initNotes();
   }
 
@@ -73,6 +72,16 @@ export default class Fretboard {
     this.colors.thirdColor = window.getComputedStyle(document.getElementById('third')).backgroundColor;
     this.colors.fifthColor = window.getComputedStyle(document.getElementById('fifth')).backgroundColor;
     this.colors.sevenColor = window.getComputedStyle(document.getElementById('seven')).backgroundColor;
+  }
+
+  updateSize() {
+    console.log("Update Size")
+    this.canvas.width = this.container.clientWidth;
+    this.canvas.height = this.container.clientHeight;
+    this.width = this.canvas.clientWidth;
+    this.height = this.canvas.clientHeight;
+    this.fretWidth = (this.width - this.zeroFretOffset) / this.numFrets;
+    this.noteRadius = this.fretWidth / 4;
   }
 
   /**
@@ -91,14 +100,9 @@ export default class Fretboard {
     this.ctx.font = '15px Fira Sans';
 
     this.board.forEach((string, i) => {
-      console.log('String:', i, string);
+      // console.log('String:', i, string);
 
       string.forEach((note, j) => {
-        if (i === 0) {
-          if (j === 3 || j === 5 ||  j === 7 ||  j === 9 ||  j === 12 ||  j === 15 ||  j === 17) {
-            this.drawFretNumber(j);
-          }
-        }
 
         if (note !== null) {
           let name = this.trimNumber(note);
@@ -121,7 +125,7 @@ export default class Fretboard {
             this.ctx.lineWidth = 1.5
           }
           this.ctx.fillText(name,
-            j * this.fretWidth - this.zeroFretOffset - 5,
+            j * this.fretWidth - this.zeroFretOffset - this.fretWidth/5,
             (5 - i) * this.stringHeight + this.stringPadding + 3
           );
           this.ctx.fillStyle = '#0c0c0c'
@@ -166,9 +170,19 @@ export default class Fretboard {
     }
   }
 
-  drawFretNumber(fretNumber) {
-    this.ctx.fillStyle = '#00000';
-    this.ctx.fillText(fretNumber, fretNumber * this.fretWidth - this.zeroFretOffset - 2, this.height - 10)
+  drawFretNumber() {
+    this.board.forEach((string, i) => {
+      string.forEach((note, j) => {
+        if (i === 0) {
+          if (j === 3 || j === 5 ||  j === 7 ||  j === 9 ||  j === 12 ||  j === 15 ||  j === 17) {
+            console.log('Draw Fret Number ');
+            this.ctx.fillStyle = '#00000';
+            this.ctx.fillText(j, j * this.fretWidth - this.zeroFretOffset - this.width/12.5, this.height - 10);
+            this.ctx.fill();
+          }
+        }
+      });
+    });
   }
 
   drawStrings() {
